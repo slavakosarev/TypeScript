@@ -2,7 +2,7 @@ import { renderBlock } from './lib.js';
 
 export function renderSearchFormBlock() {
 
-  const dateNow = new Date(Date.now());
+  const dateNow: Date = new Date(Date.now());
   const currentDate = dateNow.toLocaleDateString('en-CA');
 
   const getLastDayOfNextMonth = () => {

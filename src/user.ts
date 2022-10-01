@@ -1,8 +1,9 @@
 import { renderBlock } from './lib.js';
 
 export function renderUserBlock(name: string, linkOnAvatar: string, favoriteItemsAmount: number) {
-  const favoritesCaption = favoriteItemsAmount ? favoriteItemsAmount : 'ничего нет';
-  const hasFavoriteItems = favoriteItemsAmount ? true : false;
+  // const favoritesCaption = favoriteItemsAmount ? favoriteItemsAmount : 0;
+  // const hasFavoriteItems = favoriteItemsAmount ? true : false;
+  const items: number | string = Boolean(favoriteItemsAmount) ? favoriteItemsAmount : 'ничего нет';
 
   renderBlock(
     'user-block',
@@ -12,7 +13,7 @@ export function renderUserBlock(name: string, linkOnAvatar: string, favoriteItem
       <div class="info">
           <p class="name">${name}</p>
           <p class="fav">
-            <i class="heart-icon${hasFavoriteItems ? ' active' : ''}"></i>${favoritesCaption}
+            <i class="heart-icon${Boolean(favoriteItemsAmount) ? ' active' : ''}"></i>${items}
           </p>
       </div>
     </div>
