@@ -9,19 +9,19 @@ export function renderSearchFormBlock() {
     let lastDayOfNextMonth = new Date(dateNow);
     lastDayOfNextMonth.setMonth(lastDayOfNextMonth.getMonth() + 2, 0);
     return lastDayOfNextMonth.toLocaleDateString('en-CA')
-  }
+  };
 
   const checkInDefault = () => {
     let defaultDayIn = new Date(dateNow);
     defaultDayIn.setDate(defaultDayIn.getDate() + 1);
     return defaultDayIn.toLocaleDateString('en-CA')
-  }
+  };
 
   const checkOutDefault = () => {
     let defaultDayOut = new Date(checkInDefault());
     defaultDayOut.setDate(defaultDayOut.getDate() + 2);
     return defaultDayOut.toLocaleDateString('en-CA')
-  }
+  };
 
   renderBlock(
     'search-form-block',
@@ -46,7 +46,7 @@ export function renderSearchFormBlock() {
           </div>
           <div>
             <label for="check-out-date">Дата выезда</label>
-            <input id="check-out-date" type="date" value="${checkOutDefault()}" min="${dateNow}" max="${getLastDayOfNextMonth()}" name="checkout" />
+            <input id="check-out-date" type="date" value="${checkOutDefault()}" min="${currentDate}" max="${getLastDayOfNextMonth()}" name="checkout" />
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
