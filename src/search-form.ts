@@ -23,6 +23,7 @@ export function renderSearchFormBlock() {
     return defaultDayOut.toLocaleDateString('en-CA')
   };
 
+
   renderBlock(
     'search-form-block',
     `
@@ -59,5 +60,37 @@ export function renderSearchFormBlock() {
       </fieldset>
     </form>
     `
-  )
+  );
+
+
+  const searchForm = document.getElementById('search-form-block');
+  searchForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const inputCity = searchForm.querySelector('#city') as HTMLInputElement;
+    const inputCheckIn = searchForm.querySelector('#check-in-date') as HTMLInputElement;
+    const inputCheckOut = searchForm.querySelector('#check-out-date') as HTMLInputElement;
+    const inputMaxPrice = searchForm.querySelector('#max-price') as HTMLInputElement;
+
+    interface ISearchFormData {
+      city: string,
+      checkin: Date | string,
+      checkout: Date | string,
+      maxPrice?: number | string,
+    };
+
+    const searchFormData: ISearchFormData = {
+      city: inputCity.value,
+      checkin: new Date(inputCheckIn.value).toLocaleString('en-CA'),
+      checkout: new Date(inputCheckOut.value).toLocaleString('en-CA'),
+      maxPrice: Boolean(inputMaxPrice.value) ? + inputMaxPrice.value : null
+    };
+
+    const search = (searchFormData: ISearchFormData) => {
+      console.log(searchFormData)
+    };
+
+    search(searchFormData);
+  });
+
 }
