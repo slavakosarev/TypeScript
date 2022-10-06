@@ -3,7 +3,16 @@ export function renderBlock(elementId: string, html: string) {
   element.innerHTML = html;
 }
 
-export function renderToast(message, action) {
+type MessageType = {
+  text: string;
+  type: string
+}
+
+type ActionType = {
+  name: string;
+  handler: () => void
+}
+export function renderToast(message: MessageType, action: ActionType) {
   let messageText = '';
 
   if (message != null) {
