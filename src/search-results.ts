@@ -1,4 +1,5 @@
 import { renderBlock } from './lib.js';
+import { searchApartment } from './search';
 
 export function renderSearchStubBlock() {
   renderBlock(
@@ -85,4 +86,12 @@ export function renderSearchResultsBlock() {
     </ul>
     `
   )
+
+  searchApartment().then(data => {
+    renderBlock(
+      'search-list-block',
+      data
+    )
+  })
+
 }
