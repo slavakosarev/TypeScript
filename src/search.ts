@@ -14,11 +14,11 @@ export interface IApartResponse {
   }
 }
 
-function dateToUnixStamp(date: Date) {
+export function dateToUnixStamp(date: Date) {
   return date.getTime() / 1000
 }
 
-function responseToJson(requestPromise) {
+export function responseToJson(requestPromise) {
   return requestPromise
     .then((response) => {
 
@@ -34,15 +34,15 @@ export async function searchApartment(): Promise<string> {
 
   const urlParams = new URLSearchParams(window.location.search);
 
-  if (urlParams.get('checkin') !== '') {
+  if (urlParams) {
 
-    const checkInDate = new Date(urlParams.get('checkin'));
-    const checkOutDate = new Date(urlParams.get('checkout'));
-    const maxPrice = urlParams.get('price');
+    const checkInDate: Date = new Date(urlParams.get('checkin'));
+    const checkOutDate: Date = new Date(urlParams.get('checkout'));
+    const maxPrice: string | null = urlParams.get('price');
 
     let url = `http://localhost:5500/places?checkInDate=${dateToUnixStamp(checkInDate)}&checkOutDate=${dateToUnixStamp(checkOutDate)}&coordinates=59.9386,30.3141`;
 
-    if (maxPrice.length > 0) {
+    if (+maxPrice > 0) {
       url += `&maxPrice=${maxPrice}`
     }
 
@@ -97,7 +97,7 @@ export async function searchApartment(): Promise<string> {
                   <div class="result-info--descr">${result_2.description}</div>
                   <div class="result-info--footer">
                     <div>
-                      <button onclick="book(${result_2.id})">Забронировать</button>
+                      <button>Забронировать</button>
                     </div>
                   </div>
                 </div>
@@ -114,13 +114,5 @@ export async function searchApartment(): Promise<string> {
       }
     }
   }
-}
-
-export function book(placeId: string | number, checkInDate: Date, checkOutDate: Date) {
-  return responseToJson(fetch(
-    `http://localhost:3030/places/${placeId}?` +
-    `checkInDate=${dateToUnixStamp(checkInDate)}&` +
-    `checkOutDate=${dateToUnixStamp(checkOutDate)}&`,
-    { method: 'PATCH' }
-  ));
+  return this
 }
