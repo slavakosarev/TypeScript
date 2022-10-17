@@ -1,4 +1,5 @@
-import { renderBlock } from './lib.js';
+import { renderBlock } from './lib';
+import { APIlocal } from './APIlocal';
 
 export function renderUserBlock(userName: string, avatarUrl: string, favoriteItemsAmount?: number) {
 
@@ -21,14 +22,15 @@ export function renderUserBlock(userName: string, avatarUrl: string, favoriteIte
 };
 
 type User = {
-  userName: string;
-  avatarUrl: string
+  userName: unknown,
+  avatarUrl: unknown
 };
 
 export function getUserData(): User | null {
-  const item: string = localStorage.getItem('user');
+  const item: string = APIlocal.get('user');
 
   if (item)
+
     try {
       const user: unknown = JSON.parse(item);
       if (typeof user === 'object' && 'userName' in user && 'avatarUrl' in user)
@@ -41,8 +43,10 @@ export function getUserData(): User | null {
 };
 
 export function getFavoritesAmount(): number {
-  const amount: unknown = localStorage.getItem('FavoritesAmount');
+
+  const amount: string = APIlocal.get('FavoritesAmount');
+
   if (amount && !isNaN(Number(amount)))
-    return +amount;
+    return +amount
   else return 0;
 };

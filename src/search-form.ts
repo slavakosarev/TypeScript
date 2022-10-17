@@ -62,7 +62,6 @@ export function renderSearchFormBlock() {
     `
   );
 
-
   const searchForm = document.getElementById('search-form-block');
   searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
