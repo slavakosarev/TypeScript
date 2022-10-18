@@ -1,11 +1,11 @@
 import { MessageType, ActionType } from './types';
 
 export function renderBlock(elementId: string, html: string) {
-  const element = document.getElementById(elementId);
+  const element: HTMLElement | null = document.getElementById(elementId);
   element.innerHTML = html;
 }
 
-export function renderToast(message: MessageType, action: ActionType) {
+export function renderToast(message: MessageType | null, action: ActionType | null) {
   let messageText = '';
 
   if (message != null) {

@@ -3,7 +3,7 @@ import { APIlocal } from './APIlocal';
 
 export function renderUserBlock(userName: string, avatarUrl: string, favoriteItemsAmount?: number) {
 
-  const items: number | string = Boolean(favoriteItemsAmount) ? favoriteItemsAmount : 'ничего нет';
+  const items = Boolean(favoriteItemsAmount) ? favoriteItemsAmount : 'ничего нет';
 
   renderBlock(
     'user-block',
@@ -27,12 +27,12 @@ type User = {
 };
 
 export function getUserData(): User | null {
-  const item: string = APIlocal.get('user');
+  const item: string | null = APIlocal.get('user');
 
   if (item)
 
     try {
-      const user: unknown = JSON.parse(item);
+      const user: object | null = JSON.parse(item);
       if (typeof user === 'object' && 'userName' in user && 'avatarUrl' in user)
         return { userName: user['userName'], avatarUrl: user['avatarUrl'] }
     }
@@ -44,7 +44,7 @@ export function getUserData(): User | null {
 
 export function getFavoritesAmount(): number {
 
-  const amount: string = APIlocal.get('FavoritesAmount');
+  const amount: string | null = APIlocal.get('FavoritesAmount');
 
   if (amount && !isNaN(Number(amount)))
     return +amount

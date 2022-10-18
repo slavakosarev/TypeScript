@@ -6,7 +6,6 @@ export declare type ActionType = {
     name: string;
     handler: () => void;
 };
-export declare type Review = [string, number, string];
 export declare type Id = number | string;
 export declare type WeekDay = 'Пн' | 'Вт' | 'Ср' | 'Чт' | 'Пт' | 'Сб' | 'Вс';
 export declare type WeekDayNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6;

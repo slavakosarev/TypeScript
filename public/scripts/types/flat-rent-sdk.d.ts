@@ -34,7 +34,7 @@ export declare class FlatRentSdk {
     _assertDatesAreCorrect(checkInDate: any, checkOutDate: any): void;
     _resetTime(date: any): void;
     _calculateDifferenceInDays(startDate: any, endDate: any): number;
-    _generateDateRange(from: any, to: any): any[];
+    _generateDateRange(from: any, to: any): Date[];
     _generateTransactionId: () => number;
     _areAllDatesAvailable(flat: any, dateRange: any): any;
     _formatFlatObject(flat: any, nightNumber: any): any;

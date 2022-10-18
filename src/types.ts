@@ -8,8 +8,6 @@ export type ActionType = {
   handler: () => void
 };
 
-export type Review = [string, number, string];
-
 export type Id = number | string;
 export type WeekDay = 'Пн' | 'Вт' | 'Ср' | 'Чт' | 'Пт' | 'Сб' | 'Вс';
 export type WeekDayNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6;

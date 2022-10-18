@@ -7,8 +7,8 @@ export declare class Place {
     readonly remoteness: number;
     readonly price: number;
     readonly bookedDates: Date[] | number[];
-    readonly coordinates?: number[];
-    constructor(provider: string, originalId: string, image: string, name: string, description: string, remoteness: number, price: number, bookedDates: Date[] | number[], coordinates?: number[]);
+    readonly coordinates?: number[] | undefined;
+    constructor(provider: string, originalId: string, image: string, name: string, description: string, remoteness: number, price: number, bookedDates: Date[] | number[], coordinates?: number[] | undefined);
     get id(): string;
     isProvidedBy(providerName: string): boolean;
 }

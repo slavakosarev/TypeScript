@@ -18,15 +18,13 @@ export function dateToUnixStamp(date: Date) {
   return date.getTime() / 1000
 }
 
-export function responseToJson(requestPromise) {
+export function responseToJson(requestPromise: any) {
   return requestPromise
-    .then((response) => {
-
+    .then((response: any) => {
       return response.text()
     })
-    .then((responseText: string) => {
-
-      return JSON.parse(responseText)
+    .then((response: any) => {
+      return JSON.parse(response)
     })
 }
 
