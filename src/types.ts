@@ -26,3 +26,17 @@ export type TFavorite = {
 export type TFavorites = {
   [key: string]: TFavorite
 };
+
+export type Book = {
+  placeId: Id,
+  checkInDate: Date,
+  checkOutDate: Date,
+  maxPrice?: number
+};
+
+export type TRoom = {
+  placeId: Id,
+  checkInDate: Date,
+  checkOutDate: Date,
+  maxPrice?: number
+};

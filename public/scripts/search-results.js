@@ -1,83 +1,78 @@
 import { renderBlock } from './lib.js';
-import { searchApartment } from './search.js';
 export function renderSearchStubBlock() {
-  renderBlock('search-results-block', `
+    renderBlock('search-results-block', `
     <div class="before-results-block">
       <img src="img/start-search.png" />
       <p>Чтобы начать поиск, заполните форму и&nbsp;нажмите "Найти"</p>
     </div>
     `);
 }
-;
 export function renderEmptyOrErrorSearchBlock(reasonMessage) {
-  renderBlock('search-results-block', `
+    renderBlock('search-results-block', `
     <div class="no-results-block">
       <img src="img/no-results.png" />
       <p>${reasonMessage}</p>
     </div>
     `);
 }
-;
-export function renderSearchResultsBlock() {
-  renderBlock('search-results-block', `
+export function renderSearchResultsBlock(results, sort) {
+    const placeItems = [];
+    let optionsNames = [
+        'Сначала дешёвые',
+        'Сначала дорогие',
+        'Сначала ближе'
+    ];
+    let options = optionsNames.map((option) => {
+        if (option == sort) {
+            return `<option selected>${option}</option>`;
+        }
+        else {
+            return `<option>${option}</option>`;
+        }
+    });
+    if (Object.keys(results).length != 0) {
+        results.forEach((place) => {
+            placeItems.push(`
+          <li class="result">
+          <div class="result-container">
+            <div class="result-img-container">
+              <div data-id=${place.id} data-name=${JSON.stringify(place.name)})} data-image=${place.image} class="favorites js-favorite"></div>
+              <img class="result-img" src="${place.image}" alt="">
+            </div>	
+            <div class="result-info">
+              <div class="result-info--header">
+                <p>${place.name}</p>
+                <p class="price">${place.price}&#8381;</p>
+              </div>
+              <div class="result-info--map"><i class="map-icon"></i> ${place.remoteness}км от вас</div>
+              <div class="result-info--descr">${place.description}</div>
+              <div class="result-info--footer">
+                <div>
+                  <button>Забронировать</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        `);
+        });
+    }
+    else {
+        placeItems.push(`<li class="result">Данные отсутсвуют</li>`);
+    }
+    renderBlock('search-results-block', `
     <div class="search-results-header">
         <p>Результаты поиска</p>
         <div class="search-results-filter">
             <span><i class="icon icon-filter"></i> Сортировать:</span>
-            <select>
-                <option selected="">Сначала дешёвые</option>
-                <option selected="">Сначала дорогие</option>
-                <option>Сначала ближе</option>
+            <select id="sort">
+                ${options.join('')}
             </select>
         </div>
     </div>
-    <ul class="results-list">
-      <li class="result">
-        <div class="result-container">
-          <div class="result-img-container">
-            <div class="favorites active"></div>
-            <img class="result-img" src="./img/result-1.png" alt="">
-          </div>	
-          <div class="result-info">
-            <div class="result-info--header">
-              <p>YARD Residence Apart-hotel</p>
-              <p class="price">13000&#8381;</p>
-            </div>
-            <div class="result-info--map"><i class="map-icon"></i> 2.5км от вас</div>
-            <div class="result-info--descr">Комфортный апарт-отель в самом сердце Санкт-Петербрга. К услугам гостей номера с видом на город и бесплатный Wi-Fi.</div>
-            <div class="result-info--footer">
-              <div>
-                <button>Забронировать</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="result">
-        <div class="result-container">
-          <div class="result-img-container">
-            <div class="favorites"></div>
-            <img class="result-img" src="./img/result-2.png" alt="">
-          </div>	
-          <div class="result-info">
-            <div class="result-info--header">
-              <p>Akyan St.Petersburg</p>
-              <p class="price">13000&#8381;</p>
-            </div>
-            <div class="result-info--map"><i class="map-icon"></i> 1.1км от вас</div>
-            <div class="result-info--descr">Отель Akyan St-Petersburg с бесплатным Wi-Fi на всей территории расположен в историческом здании Санкт-Петербурга.</div>
-            <div class="result-info--footer">
-              <div>
-                <button>Забронировать</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
+    <ul class="results-list js-results-list">
+    ${placeItems.join('')}
     </ul>
     `);
-  searchApartment().then(data => {
-    renderBlock('search-list-block', data);
-  });
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VhcmNoLXJlc3VsdHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvc2VhcmNoLXJlc3VsdHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLFdBQVcsRUFBRSxNQUFNLFVBQVUsQ0FBQztBQUN2QyxPQUFPLEVBQUUsZUFBZSxFQUFFLE1BQU0sVUFBVSxDQUFDO0FBRTNDLE1BQU0sVUFBVSxxQkFBcUI7SUFDbkMsV0FBVyxDQUNULHNCQUFzQixFQUN0Qjs7Ozs7S0FLQyxDQUNGLENBQUE7QUFDSCxDQUFDO0FBQUEsQ0FBQztBQUVGLE1BQU0sVUFBVSw2QkFBNkIsQ0FBQyxhQUFhO0lBQ3pELFdBQVcsQ0FDVCxzQkFBc0IsRUFDdEI7OztXQUdPLGFBQWE7O0tBRW5CLENBQ0YsQ0FBQTtBQUNILENBQUM7QUFBQSxDQUFDO0FBRUYsTUFBTSxVQUFVLHdCQUF3QjtJQUN0QyxXQUFXLENBQ1Qsc0JBQXNCLEVBQ3RCOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztLQXdEQyxDQUNGLENBQUE7SUFFRCxlQUFlLEVBQUUsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEVBQUU7UUFDNUIsV0FBVyxDQUNULG1CQUFtQixFQUNuQixJQUFJLENBQ0wsQ0FBQTtJQUNILENBQUMsQ0FBQyxDQUFBO0FBRUosQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHJlbmRlckJsb2NrIH0gZnJvbSAnLi9saWIuanMnO1xyXG5pbXBvcnQgeyBzZWFyY2hBcGFydG1lbnQgfSBmcm9tICcuL3NlYXJjaCc7XHJcblxyXG5leHBvcnQgZnVuY3Rpb24gcmVuZGVyU2VhcmNoU3R1YkJsb2NrKCkge1xyXG4gIHJlbmRlckJsb2NrKFxyXG4gICAgJ3NlYXJjaC1yZXN1bHRzLWJsb2NrJyxcclxuICAgIGBcclxuICAgIDxkaXYgY2xhc3M9XCJiZWZvcmUtcmVzdWx0cy1ibG9ja1wiPlxyXG4gICAgICA8aW1nIHNyYz1cImltZy9zdGFydC1zZWFyY2gucG5nXCIgLz5cclxuICAgICAgPHA+0KfRgtC+0LHRiyDQvdCw0YfQsNGC0Ywg0L/QvtC40YHQuiwg0LfQsNC/0L7Qu9C90LjRgtC1INGE0L7RgNC80YMg0LgmbmJzcDvQvdCw0LbQvNC40YLQtSBcItCd0LDQudGC0LhcIjwvcD5cclxuICAgIDwvZGl2PlxyXG4gICAgYFxyXG4gIClcclxufTtcclxuXHJcbmV4cG9ydCBmdW5jdGlvbiByZW5kZXJFbXB0eU9yRXJyb3JTZWFyY2hCbG9jayhyZWFzb25NZXNzYWdlKSB7XHJcbiAgcmVuZGVyQmxvY2soXHJcbiAgICAnc2VhcmNoLXJlc3VsdHMtYmxvY2snLFxyXG4gICAgYFxyXG4gICAgPGRpdiBjbGFzcz1cIm5vLXJlc3VsdHMtYmxvY2tcIj5cclxuICAgICAgPGltZyBzcmM9XCJpbWcvbm8tcmVzdWx0cy5wbmdcIiAvPlxyXG4gICAgICA8cD4ke3JlYXNvbk1lc3NhZ2V9PC9wPlxyXG4gICAgPC9kaXY+XHJcbiAgICBgXHJcbiAgKVxyXG59O1xyXG5cclxuZXhwb3J0IGZ1bmN0aW9uIHJlbmRlclNlYXJjaFJlc3VsdHNCbG9jaygpIHtcclxuICByZW5kZXJCbG9jayhcclxuICAgICdzZWFyY2gtcmVzdWx0cy1ibG9jaycsXHJcbiAgICBgXHJcbiAgICA8ZGl2IGNsYXNzPVwic2VhcmNoLXJlc3VsdHMtaGVhZGVyXCI+XHJcbiAgICAgICAgPHA+0KDQtdC30YPQu9GM0YLQsNGC0Ysg0L/QvtC40YHQutCwPC9wPlxyXG4gICAgICAgIDxkaXYgY2xhc3M9XCJzZWFyY2gtcmVzdWx0cy1maWx0ZXJcIj5cclxuICAgICAgICAgICAgPHNwYW4+PGkgY2xhc3M9XCJpY29uIGljb24tZmlsdGVyXCI+PC9pPiDQodC+0YDRgtC40YDQvtCy0LDRgtGMOjwvc3Bhbj5cclxuICAgICAgICAgICAgPHNlbGVjdD5cclxuICAgICAgICAgICAgICAgIDxvcHRpb24gc2VsZWN0ZWQ9XCJcIj7QodC90LDRh9Cw0LvQsCDQtNC10YjRkdCy0YvQtTwvb3B0aW9uPlxyXG4gICAgICAgICAgICAgICAgPG9wdGlvbiBzZWxlY3RlZD1cIlwiPtCh0L3QsNGH0LDQu9CwINC00L7RgNC+0LPQuNC1PC9vcHRpb24+XHJcbiAgICAgICAgICAgICAgICA8b3B0aW9uPtCh0L3QsNGH0LDQu9CwINCx0LvQuNC20LU8L29wdGlvbj5cclxuICAgICAgICAgICAgPC9zZWxlY3Q+XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICA8L2Rpdj5cclxuICAgIDx1bCBjbGFzcz1cInJlc3VsdHMtbGlzdFwiPlxyXG4gICAgICA8bGkgY2xhc3M9XCJyZXN1bHRcIj5cclxuICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWNvbnRhaW5lclwiPlxyXG4gICAgICAgICAgPGRpdiBjbGFzcz1cInJlc3VsdC1pbWctY29udGFpbmVyXCI+XHJcbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJmYXZvcml0ZXMgYWN0aXZlXCI+PC9kaXY+XHJcbiAgICAgICAgICAgIDxpbWcgY2xhc3M9XCJyZXN1bHQtaW1nXCIgc3JjPVwiLi9pbWcvcmVzdWx0LTEucG5nXCIgYWx0PVwiXCI+XHJcbiAgICAgICAgICA8L2Rpdj5cdFxyXG4gICAgICAgICAgPGRpdiBjbGFzcz1cInJlc3VsdC1pbmZvXCI+XHJcbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mby0taGVhZGVyXCI+XHJcbiAgICAgICAgICAgICAgPHA+WUFSRCBSZXNpZGVuY2UgQXBhcnQtaG90ZWw8L3A+XHJcbiAgICAgICAgICAgICAgPHAgY2xhc3M9XCJwcmljZVwiPjEzMDAwJiM4MzgxOzwvcD5cclxuICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mby0tbWFwXCI+PGkgY2xhc3M9XCJtYXAtaWNvblwiPjwvaT4gMi410LrQvCDQvtGCINCy0LDRgTwvZGl2PlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWRlc2NyXCI+0JrQvtC80YTQvtGA0YLQvdGL0Lkg0LDQv9Cw0YDRgi3QvtGC0LXQu9GMINCyINGB0LDQvNC+0Lwg0YHQtdGA0LTRhtC1INCh0LDQvdC60YIt0J/QtdGC0LXRgNCx0YDQs9CwLiDQmiDRg9GB0LvRg9Cz0LDQvCDQs9C+0YHRgtC10Lkg0L3QvtC80LXRgNCwINGBINCy0LjQtNC+0Lwg0L3QsCDQs9C+0YDQvtC0INC4INCx0LXRgdC/0LvQsNGC0L3Ri9C5IFdpLUZpLjwvZGl2PlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWZvb3RlclwiPlxyXG4gICAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICA8YnV0dG9uPtCX0LDQsdGA0L7QvdC40YDQvtCy0LDRgtGMPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICAgIDwvbGk+XHJcbiAgICAgIDxsaSBjbGFzcz1cInJlc3VsdFwiPlxyXG4gICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtY29udGFpbmVyXCI+XHJcbiAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWltZy1jb250YWluZXJcIj5cclxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZhdm9yaXRlc1wiPjwvZGl2PlxyXG4gICAgICAgICAgICA8aW1nIGNsYXNzPVwicmVzdWx0LWltZ1wiIHNyYz1cIi4vaW1nL3Jlc3VsdC0yLnBuZ1wiIGFsdD1cIlwiPlxyXG4gICAgICAgICAgPC9kaXY+XHRcclxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mb1wiPlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWhlYWRlclwiPlxyXG4gICAgICAgICAgICAgIDxwPkFreWFuIFN0LlBldGVyc2J1cmc8L3A+XHJcbiAgICAgICAgICAgICAgPHAgY2xhc3M9XCJwcmljZVwiPjEzMDAwJiM4MzgxOzwvcD5cclxuICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mby0tbWFwXCI+PGkgY2xhc3M9XCJtYXAtaWNvblwiPjwvaT4gMS4x0LrQvCDQvtGCINCy0LDRgTwvZGl2PlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWRlc2NyXCI+0J7RgtC10LvRjCBBa3lhbiBTdC1QZXRlcnNidXJnINGBINCx0LXRgdC/0LvQsNGC0L3Ri9C8IFdpLUZpINC90LAg0LLRgdC10Lkg0YLQtdGA0YDQuNGC0L7RgNC40Lgg0YDQsNGB0L/QvtC70L7QttC10L0g0LIg0LjRgdGC0L7RgNC40YfQtdGB0LrQvtC8INC30LTQsNC90LjQuCDQodCw0L3QutGCLdCf0LXRgtC10YDQsdGD0YDQs9CwLjwvZGl2PlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWZvb3RlclwiPlxyXG4gICAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICA8YnV0dG9uPtCX0LDQsdGA0L7QvdC40YDQvtCy0LDRgtGMPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICAgIDwvbGk+XHJcbiAgICA8L3VsPlxyXG4gICAgYFxyXG4gIClcclxuXHJcbiAgc2VhcmNoQXBhcnRtZW50KCkudGhlbihkYXRhID0+IHtcclxuICAgIHJlbmRlckJsb2NrKFxyXG4gICAgICAnc2VhcmNoLWxpc3QtYmxvY2snLFxyXG4gICAgICBkYXRhXHJcbiAgICApXHJcbiAgfSlcclxuXHJcbn1cclxuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VhcmNoLXJlc3VsdHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvc2VhcmNoLXJlc3VsdHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLFdBQVcsRUFBRSxNQUFNLFVBQVUsQ0FBQTtBQUl0QyxNQUFNLFVBQVUscUJBQXFCO0lBQ25DLFdBQVcsQ0FDVCxzQkFBc0IsRUFDdEI7Ozs7O0tBS0MsQ0FDRixDQUFBO0FBQ0gsQ0FBQztBQUVELE1BQU0sVUFBVSw2QkFBNkIsQ0FBQyxhQUFhO0lBQ3pELFdBQVcsQ0FDVCxzQkFBc0IsRUFDdEI7OztXQUdPLGFBQWE7O0tBRW5CLENBQ0YsQ0FBQTtBQUNILENBQUM7QUFFRCxNQUFNLFVBQVUsd0JBQXdCLENBQUMsT0FBZ0IsRUFBRSxJQUFhO0lBQ3RFLE1BQU0sVUFBVSxHQUFHLEVBQUUsQ0FBQztJQUV0QixJQUFJLFlBQVksR0FBRztRQUNqQixpQkFBaUI7UUFDakIsaUJBQWlCO1FBQ2pCLGVBQWU7S0FDaEIsQ0FBQztJQUNGLElBQUksT0FBTyxHQUFHLFlBQVksQ0FBQyxHQUFHLENBQUMsQ0FBQyxNQUFNLEVBQUUsRUFBRTtRQUV4QyxJQUFJLE1BQU0sSUFBSSxJQUFJLEVBQUU7WUFDbEIsT0FBTyxvQkFBb0IsTUFBTSxXQUFXLENBQUE7U0FDN0M7YUFDSTtZQUNILE9BQU8sV0FBVyxNQUFNLFdBQVcsQ0FBQTtTQUNwQztJQUNILENBQUMsQ0FBQyxDQUFBO0lBRUYsSUFBSSxNQUFNLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLE1BQU0sSUFBSSxDQUFDLEVBQUU7UUFDcEMsT0FBTyxDQUFDLE9BQU8sQ0FBQyxDQUFDLEtBQVksRUFBRSxFQUFFO1lBQy9CLFVBQVUsQ0FBQyxJQUFJLENBQ2I7Ozs7NkJBSXFCLEtBQUssQ0FBQyxFQUFFLGNBQWMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLGlCQUFpQixLQUFLLENBQUMsS0FBSzs2Q0FDNUQsS0FBSyxDQUFDLEtBQUs7Ozs7cUJBSW5DLEtBQUssQ0FBQyxJQUFJO21DQUNJLEtBQUssQ0FBQyxLQUFLOzt1RUFFeUIsS0FBSyxDQUFDLFVBQVU7Z0RBQ3ZDLEtBQUssQ0FBQyxXQUFXOzs7Ozs7Ozs7U0FTeEQsQ0FDRixDQUFBO1FBRUgsQ0FBQyxDQUFDLENBQUM7S0FFSjtTQUFNO1FBQ0wsVUFBVSxDQUFDLElBQUksQ0FBQywyQ0FBMkMsQ0FBQyxDQUFDO0tBQzlEO0lBR0QsV0FBVyxDQUNULHNCQUFzQixFQUN0Qjs7Ozs7O2tCQU1jLE9BQU8sQ0FBQyxJQUFJLENBQUMsRUFBRSxDQUFDOzs7OztNQUs1QixVQUFVLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQzs7S0FFcEIsQ0FDRixDQUFBO0FBQ0gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHJlbmRlckJsb2NrIH0gZnJvbSAnLi9saWIuanMnXG5pbXBvcnQgeyBQbGFjZSB9IGZyb20gJy4vc3RvcmUvZG9tYWluL3BsYWNlLmpzJztcblxuXG5leHBvcnQgZnVuY3Rpb24gcmVuZGVyU2VhcmNoU3R1YkJsb2NrKCkge1xuICByZW5kZXJCbG9jayhcbiAgICAnc2VhcmNoLXJlc3VsdHMtYmxvY2snLFxuICAgIGBcbiAgICA8ZGl2IGNsYXNzPVwiYmVmb3JlLXJlc3VsdHMtYmxvY2tcIj5cbiAgICAgIDxpbWcgc3JjPVwiaW1nL3N0YXJ0LXNlYXJjaC5wbmdcIiAvPlxuICAgICAgPHA+0KfRgtC+0LHRiyDQvdCw0YfQsNGC0Ywg0L/QvtC40YHQuiwg0LfQsNC/0L7Qu9C90LjRgtC1INGE0L7RgNC80YMg0LgmbmJzcDvQvdCw0LbQvNC40YLQtSBcItCd0LDQudGC0LhcIjwvcD5cbiAgICA8L2Rpdj5cbiAgICBgXG4gIClcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHJlbmRlckVtcHR5T3JFcnJvclNlYXJjaEJsb2NrKHJlYXNvbk1lc3NhZ2UpIHtcbiAgcmVuZGVyQmxvY2soXG4gICAgJ3NlYXJjaC1yZXN1bHRzLWJsb2NrJyxcbiAgICBgXG4gICAgPGRpdiBjbGFzcz1cIm5vLXJlc3VsdHMtYmxvY2tcIj5cbiAgICAgIDxpbWcgc3JjPVwiaW1nL25vLXJlc3VsdHMucG5nXCIgLz5cbiAgICAgIDxwPiR7cmVhc29uTWVzc2FnZX08L3A+XG4gICAgPC9kaXY+XG4gICAgYFxuICApXG59XG5cbmV4cG9ydCBmdW5jdGlvbiByZW5kZXJTZWFyY2hSZXN1bHRzQmxvY2socmVzdWx0czogUGxhY2VbXSwgc29ydD86IHN0cmluZykge1xuICBjb25zdCBwbGFjZUl0ZW1zID0gW107XG5cbiAgbGV0IG9wdGlvbnNOYW1lcyA9IFtcbiAgICAn0KHQvdCw0YfQsNC70LAg0LTQtdGI0ZHQstGL0LUnLFxuICAgICfQodC90LDRh9Cw0LvQsCDQtNC+0YDQvtCz0LjQtScsXG4gICAgJ9Ch0L3QsNGH0LDQu9CwINCx0LvQuNC20LUnXG4gIF07XG4gIGxldCBvcHRpb25zID0gb3B0aW9uc05hbWVzLm1hcCgob3B0aW9uKSA9PiB7XG5cbiAgICBpZiAob3B0aW9uID09IHNvcnQpIHtcbiAgICAgIHJldHVybiBgPG9wdGlvbiBzZWxlY3RlZD4ke29wdGlvbn08L29wdGlvbj5gXG4gICAgfVxuICAgIGVsc2Uge1xuICAgICAgcmV0dXJuIGA8b3B0aW9uPiR7b3B0aW9ufTwvb3B0aW9uPmBcbiAgICB9XG4gIH0pXG5cbiAgaWYgKE9iamVjdC5rZXlzKHJlc3VsdHMpLmxlbmd0aCAhPSAwKSB7XG4gICAgcmVzdWx0cy5mb3JFYWNoKChwbGFjZTogUGxhY2UpID0+IHtcbiAgICAgIHBsYWNlSXRlbXMucHVzaChcbiAgICAgICAgYFxuICAgICAgICAgIDxsaSBjbGFzcz1cInJlc3VsdFwiPlxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtY29udGFpbmVyXCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWltZy1jb250YWluZXJcIj5cbiAgICAgICAgICAgICAgPGRpdiBkYXRhLWlkPSR7cGxhY2UuaWR9IGRhdGEtbmFtZT0ke0pTT04uc3RyaW5naWZ5KHBsYWNlLm5hbWUpfSl9IGRhdGEtaW1hZ2U9JHtwbGFjZS5pbWFnZX0gY2xhc3M9XCJmYXZvcml0ZXMganMtZmF2b3JpdGVcIj48L2Rpdj5cbiAgICAgICAgICAgICAgPGltZyBjbGFzcz1cInJlc3VsdC1pbWdcIiBzcmM9XCIke3BsYWNlLmltYWdlfVwiIGFsdD1cIlwiPlxuICAgICAgICAgICAgPC9kaXY+XHRcbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mb1wiPlxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzPVwicmVzdWx0LWluZm8tLWhlYWRlclwiPlxuICAgICAgICAgICAgICAgIDxwPiR7cGxhY2UubmFtZX08L3A+XG4gICAgICAgICAgICAgICAgPHAgY2xhc3M9XCJwcmljZVwiPiR7cGxhY2UucHJpY2V9JiM4MzgxOzwvcD5cbiAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mby0tbWFwXCI+PGkgY2xhc3M9XCJtYXAtaWNvblwiPjwvaT4gJHtwbGFjZS5yZW1vdGVuZXNzfdC60Lwg0L7RgiDQstCw0YE8L2Rpdj5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cInJlc3VsdC1pbmZvLS1kZXNjclwiPiR7cGxhY2UuZGVzY3JpcHRpb259PC9kaXY+XG4gICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJyZXN1bHQtaW5mby0tZm9vdGVyXCI+XG4gICAgICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgICAgIDxidXR0b24+0JfQsNCx0YDQvtC90LjRgNC+0LLQsNGC0Yw8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9saT5cbiAgICAgICAgYFxuICAgICAgKVxuXG4gICAgfSk7XG5cbiAgfSBlbHNlIHtcbiAgICBwbGFjZUl0ZW1zLnB1c2goYDxsaSBjbGFzcz1cInJlc3VsdFwiPtCU0LDQvdC90YvQtSDQvtGC0YHRg9GC0YHQstGD0Y7RgjwvbGk+YCk7XG4gIH1cblxuXG4gIHJlbmRlckJsb2NrKFxuICAgICdzZWFyY2gtcmVzdWx0cy1ibG9jaycsXG4gICAgYFxuICAgIDxkaXYgY2xhc3M9XCJzZWFyY2gtcmVzdWx0cy1oZWFkZXJcIj5cbiAgICAgICAgPHA+0KDQtdC30YPQu9GM0YLQsNGC0Ysg0L/QvtC40YHQutCwPC9wPlxuICAgICAgICA8ZGl2IGNsYXNzPVwic2VhcmNoLXJlc3VsdHMtZmlsdGVyXCI+XG4gICAgICAgICAgICA8c3Bhbj48aSBjbGFzcz1cImljb24gaWNvbi1maWx0ZXJcIj48L2k+INCh0L7RgNGC0LjRgNC+0LLQsNGC0Yw6PC9zcGFuPlxuICAgICAgICAgICAgPHNlbGVjdCBpZD1cInNvcnRcIj5cbiAgICAgICAgICAgICAgICAke29wdGlvbnMuam9pbignJyl9XG4gICAgICAgICAgICA8L3NlbGVjdD5cbiAgICAgICAgPC9kaXY+XG4gICAgPC9kaXY+XG4gICAgPHVsIGNsYXNzPVwicmVzdWx0cy1saXN0IGpzLXJlc3VsdHMtbGlzdFwiPlxuICAgICR7cGxhY2VJdGVtcy5qb2luKCcnKX1cbiAgICA8L3VsPlxuICAgIGBcbiAgKVxufVxuIl19

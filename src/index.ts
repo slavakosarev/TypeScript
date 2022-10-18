@@ -1,6 +1,6 @@
 import { renderSearchFormBlock } from './search-form';
 import { renderSearchStubBlock } from './search-results';
-import { toggleFavoriteItem } from './toggleFavorites';
+import { toggleFavoriteItem } from './toggleFavorite';
 import { renderUserBlock } from './user';
 import { bookStart } from './booking';
 import { renderToast } from './lib';

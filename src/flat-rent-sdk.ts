@@ -39,20 +39,18 @@ const database = [
 
 export function cloneDate(date) {
   return new Date(date.getTime())
-};
+}
 
 export function addDays(date, days) {
   date.setDate(date.getDate() + days)
   return date
-};
+}
 
-export const backendPort = 3040;
-export const localStorageKey = 'flat-rent-db';
+export const backendPort = 3040
+export const localStorageKey = 'flat-rent-db'
 
 export class FlatRentSdk {
-
   constructor() {
-
     if (this._readDatabase() == null) {
       this._writeDatabase(database)
     }
@@ -68,7 +66,6 @@ export class FlatRentSdk {
    */
   get(id) {
     const flat = this.database.find((item) => {
-
       return item.id === id
     })
 
@@ -87,7 +84,6 @@ export class FlatRentSdk {
    */
   search(parameters) {
     return new Promise((resolve, reject) => {
-
       try {
         if (parameters.city != 'Санкт-Петербург') {
           throw new Error(`Passed unsupported city - "${parameters.city}".`)
@@ -135,7 +131,6 @@ export class FlatRentSdk {
    * @returns {number}
    */
   book(flatId, checkInDate, checkOutDate) {
-
     return new Promise((resolve, reject) => {
       try {
         const flat = this.database.find((item) => {
@@ -172,20 +167,17 @@ export class FlatRentSdk {
   }
 
   _assertDatesAreCorrect(checkInDate, checkOutDate) {
-
     const today = new Date()
     this._resetTime(today)
     this._resetTime(checkInDate)
     this._resetTime(checkOutDate)
 
     const diffToday = this._calculateDifferenceInDays(today, checkInDate)
-
     if (diffToday < 0) {
       throw new Error('Check-in date can\'t be in the past.')
     }
 
     const diffCheck = this._calculateDifferenceInDays(checkInDate, checkOutDate)
-
     if (diffCheck < 0) {
       throw new Error('Check-out date must be grater then check-in date.')
     }
@@ -212,6 +204,7 @@ export class FlatRentSdk {
     for (let i = 1; i <= differenceInDays; i++) {
       dates.push(new Date(from.getFullYear(), from.getMonth(), from.getDate() + i))
     }
+
     return dates
   }
 
@@ -240,6 +233,7 @@ export class FlatRentSdk {
       formattedFlat.totalPrice = nightNumber * formattedFlat.price
       delete formattedFlat.price
     }
+
     return formattedFlat
   }
 
@@ -249,6 +243,7 @@ export class FlatRentSdk {
     if (data == null) {
       return data
     }
+
     return JSON.parse(data)
   }
 
